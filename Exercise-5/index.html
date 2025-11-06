@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signup</title>
+<style>
+  body{font-family:sans-serif;background:#f4f4f4;padding:20px}
+  .box{max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:6px}
+  label{display:block;margin-top:10px}
+  input,button{width:100%;padding:8px;margin-top:4px;border:1px solid #ccc;border-radius:4px}
+  .error{color:red;font-size:13px;height:14px}
+  .ok{border-color:green}.bad{border-color:red}
+  button{background:#07e;color:#fff;border:0;cursor:pointer}
+  #msg{margin-top:10px;color:green;display:none}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Create Account</h2>
+  <form id="f">
+    <label>Full Name*<input id="name" required minlength="2"></label><div id="nameErr" class="error"></div>
+    <label>Email*<input id="email" type="email" required></label><div id="emailErr" class="error"></div>
+    <label>Password*<input id="pass" type="password" required minlength="8"></label><div id="passErr" class="error"></div>
+    <label>Phone*<input id="phone" required></label><div id="phoneErr" class="error"></div>
+    <button>Create Account</button>
+    <div id="msg">Account created</div>
+  </form>
+</div>
+
+<script>
+const f=document.getElementById("f"),
+e={name:0,email:0,pass:0,phone:0},
+msg=document.getElementById("msg"),
+re={email:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,pass:/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,phone:/^\+?\d{10,15}$/};
+
+function check(id,label,rx){
+  let el=f[id],val=el.value.trim(),err=document.getElementById(id+"Err");
+  if(!val){err.textContent=label+" required";el.className="bad";return 0}
+  if(rx&&!rx.test(val)){err.textContent="Invalid "+label;el.className="bad";return 0}
+  err.textContent="";el.className="ok";return 1
+}
+
+f.onsubmit=e=>{
+  e.preventDefault();
+  let ok=check("name","Name")&check("email","Email",re.email)&check("pass","Password",re.pass)&check("phone","Phone",re.phone);
+  if(ok) msg.style.display="block";
+}
+</script>
+</body>
+</html>

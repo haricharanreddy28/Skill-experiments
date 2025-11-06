@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Weather App</title>
+</head>
+<body>
+  <h2>Weather Lookup</h2>
+  <form>
+    <input placeholder="Enter city" required>
+    <button>Search</button>
+  </form>
+  <div id="msg"></div>
+  <div id="weather" style="display:none"></div>
+
+  <script>
+    const form=document.querySelector("form"),
+          input=form.querySelector("input"),
+          msg=document.getElementById("msg"),
+          weather=document.getElementById("weather"),
+          map={0:'Clear',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Rime fog',
+               51:'Light drizzle',53:'Moderate drizzle',55:'Dense drizzle',
+               61:'Slight rain',63:'Moderate rain',65:'Heavy rain',
+               71:'Light snow',73:'Moderate snow',75:'Heavy snow',
+               80:'Rain showers',81:'Moderate showers',82:'Violent showers',
+               95:'Thunderstorm',96:'Storm w/ hail',99:'Severe storm'};
+
+    async function getWeather(city){
+      if(!city.trim())return msg.textContent="Enter a city";
+      msg.textContent="Searching...";
+      try{
+        let g=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&format=json`).then(r=>r.json());
+        if(!g.results)return msg.textContent="City not found",weather.style.display="none";
+        let p=g.results[0],place=`${p.name}${p.admin1?", "+p.admin1:""}, ${p.country}`;
+        msg.textContent="Loading...";
+        let w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.latitude}&longitude=${p.longitude}&current_weather=true&temperature_unit=celsius&windspeed_unit=kmh&timezone=auto`).then(r=>r.json());
+        let d=w.current_weather;
+        if(!d)return msg.textContent="No weather data";
+        weather.style.display="block";
+        weather.innerHTML=`<h3>${place}</h3>
+          <p>${d.temperature}°C, ${map[d.weathercode]||"?"}</p>
+          <p>Wind: ${d.windspeed} km/h</p>
+          <small>${d.time}</small>`;
+        msg.textContent="Done";
+        localStorage.setItem("city",city);
+      }catch(e){msg.textContent="Error: "+e.message}
+    }
+
+    form.onsubmit=e=>{e.preventDefault();getWeather(input.value)};
+    window.onload=()=>{let c=localStorage.getItem("city");if(c){input.value=c;getWeather(c)}}
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bakery Promo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <ul>
+            <li>Home</li>
+            <li>Products</li>
+            <li>Contact</li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <h2>Featured Products</h2>
+
+    <div class="slideshow">
+        <img src="whitecake.jpg">
+        <img src="choclatecake.jpg">
+        <img src="3colorcake.jpg">
+    </div>
+
+</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Page</title>
+  <style>
+    body{font-family:Arial;margin:0}
+    nav,footer{background:#333;color:#fff;text-align:center;padding:10px;position:fixed;width:100%}
+    nav{top:0} footer{bottom:0}
+    nav a{color:#fff;margin:0 10px;text-decoration:none}
+    header{margin-top:50px;padding:30px;text-align:center;background:#f4f4f4}
+    .slideshow{max-width:800px;margin:20px auto;overflow:hidden}
+    .slide{display:none;width:100%}
+    @media(max-width:600px){header h1{font-size:20px;color:aqua}}
+  </style>
+</head>
+<body>
+  <nav><a href="#">Home</a><a href="#">Products</a><a href="#">Contact</a></nav>
+  <header><h1>Welcome</h1><p>Check out our featured heroes</p></header>
+
+  <section class="slideshow">
+    <img class="slide" src="whitecake.jpg">
+    <img class="slide" src="choclatecake.jpg">
+    <img class="slide" src="3colorcake.jpg">
+  </section>
+
+  <footer>&copy; 2025 My Store</footer>
+
+  <script>
+    let i=0;const s=document.getElementsByClassName("slide");
+    (function show(){
+      for(let j=0;j<s.length;j++)s[j].style.display="none";
+      i=(i+1>s.length)?1:i+1;
+      s[i-1].style.display="block";
+      setTimeout(show,3000);
+    })();
+  </script>
+</body>
+</html>
+
+<footer>
+    <p>© 2025 Sweet Bakery</p>
+</footer>
+
+</body>
+</html>
